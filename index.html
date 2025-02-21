@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="App Amigo Secreto">
-    <meta name="keywords" content="Amigo Secreto, Sorteo, Navidad">
-    <meta name="author" content="Yulieta Eyzaguirre">
     <title>Amigo Secreto</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Bienvenido a la App Amigo Secreto</h1>
-        <img src="img/miauricio.png" alt="Miauricio Ministro de Fe" id="miauricio">
         <p id="welcomeMessage">Hola querido(a) visitante, te invito a probar mi app Amigo Secreto. ¿Me facilitas tu nombre?</p>
         <input type="text" id="visitorName" placeholder="Ingresa tu nombre">
         <button id="startGame">Comenzar el juego</button>
@@ -28,10 +24,14 @@
             <ul id="friendList"></ul>
 
             <button id="startDraw" style="display:none;">¿Qué comience el sorteo?</button>
-            <div id="roulette" style="display:none;"></div>
 
-            <h2>Resultado</h2>
-            <p id="result"></p>
+            <div id="roulette-container" style="display:none;">
+                <div id="roulette"></div>
+                <button id="spin-button">Girar</button>
+                <div id="result"></div>
+            </div>
+
+            <audio id="background-sound" src="mp3/winning-218995.mp3" loop></audio>
         </div>
     </div>
 
