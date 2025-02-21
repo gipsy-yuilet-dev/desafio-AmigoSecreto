@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amigo Secreto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a la App Amigo Secreto</h1>
+        <p id="welcomeMessage">Hola querido(a) visitante, te invito a probar mi app Amigo Secreto. ¿Me facilitas tu nombre?</p>
+        <input type="text" id="visitorName" placeholder="Ingresa tu nombre">
+        <button id="startGame">Comenzar el juego</button>
+
+        <div id="gameSection" style="display:none;">
+            <h2 id="greeting"></h2>
+            <input type="text" id="friendName" placeholder="Ingresa el nombre de tu amigo">
+            <input type="file" id="cardImage" accept="image/*">
+            <button id="addCard">Agregar Carta</button>
+            <button id="addFriend" style="display:none;">Adicionar Amigo</button>
+
+            <h2>Lista de Amigos</h2>
+            <ul id="friendList"></ul>
+
+            <button id="startDraw" style="display:none;">¿Qué comience el sorteo?</button>
+
+            <div id="roulette-container" style="display:none;">
+                <div id="roulette"></div>
+                <button id="spin-button">Girar</button>
+                <div id="result"></div>
+            </div>
+
+            <audio id="background-sound" src="mp3/winning-218995.mp3" loop></audio>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
