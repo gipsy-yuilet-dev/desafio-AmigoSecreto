@@ -112,6 +112,6 @@ startDrawButton.addEventListener('click', () => {
         resultDisplay.innerHTML = `
         <p>¡Felicitaciones! Soy muy afortunado(a/e), mi amigo secreto ganador es: <strong>${winner.name}</strong></p>
         <img src="${winner.card}" alt="Carta ganadora" class="thumbnail">
-        <img src="path/to/trophy.png" alt="Trofeo" class="thumbnail" style="max-width: 100px; max-height: 100px;">
+        <img src="img/trofeo.jpg" alt="Trofeo" class="thumbnail" style="max-width: 100px; max-height: 100px;">
     `;
 });
