@@ -11,6 +11,8 @@ const cardImageInput = document.getElementById('cardImage');
 const startDrawButton = document.getElementById('startDraw');
 const resultDisplay = document.getElementById('result');
 const roulette = document.getElementById('roulette');
+const spinButton = document.getElementById('spin-button');
+const backgroundSound = document.getElementById('background-sound');
 
 // Arreglo para almacenar los amigos y sus cartas
 let friends = [];
@@ -103,14 +105,40 @@ startDrawButton.addEventListener('click', () => {
         return;
     }
 
-    // Simulación de la ruleta
+    // Mostrar la ruleta
+    document.getElementById('roulette-container').style.display = 'block';
+    createRoulette(); // Crear la ruleta
+});
+
+// Función para crear la ruleta
+function createRoulette() {
+    roulette.innerHTML = ''; // Limpiar contenido previo
+    const angle = 360 / friends.length;
+
+    friends.forEach((friend, index) => {
+        const img = document.createElement('img');
+        img.src = friend.card;
+        img.style.transform = `rotate(${angle * index}deg) translateY(-150px) rotate(-${angle * index}deg)`;
+        roulette.appendChild(img);
+    });
+}
+
+// Función para girar la ruleta
+spinButton.addEventListener('click', () => {
+    const sound = backgroundSound;
+    sound.play(); // Reproducir sonido de fondo
+//funcion para detener el sonido
+    setTimeout(() => {
+        sound.pause();
+    }, 5000);  
+
+    // Girar la ruleta
     const randomIndex = Math.floor(Math.random() * friends.length);
     const winner = friends[randomIndex];
 
-    
-        // Mostrar el resultado
-        resultDisplay.innerHTML = `
-        <p>¡Felicitaciones! Soy muy afortunado(a/e), mi amigo secreto ganador es: <strong>${winner.name}</strong></p>
+    // Mostrar el resultado
+    resultDisplay.innerHTML = `
+        <p>Muchas Gracias Por ser mi amigo(a), la ruleta arrojo como ganador(a) a mi amigo(a) <strong>${winner.name}</strong></p>
         <img src="${winner.card}" alt="Carta ganadora" class="thumbnail">
         <img src="img/trofeo.jpg" alt="Trofeo" class="thumbnail" style="max-width: 100px; max-height: 100px;">
     `;
