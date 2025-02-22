@@ -1,35 +1,21 @@
-// Selección de elementos del DOM
-const visitorNameInput = document.getElementById('visitorName');
-const startGameButton = document.getElementById('startGame');
-const gameSection = document.getElementById('gameSection');
-const greeting = document.getElementById('greeting');
-const friendNameInput = document.getElementById('friendName');
-const addCardButton = document.getElementById('addCard');
-const addFriendButton = document.getElementById('addFriend');
-const friendList = document.getElementById('friendList');
-const cardImageInput = document.getElementById('cardImage');
-const startDrawButton = document.getElementById('startDraw');
-const resultDisplay = document.getElementById('result');
+// Variables y constantes
+const addCardButton = document.getElementById('add-card-button');
+const cardImageInput = document.getElementById('card-image-input');
+const addFriendButton = document.getElementById('add-friend-button');
+const friendNameInput = document.getElementById('friend-name-input');
+const friendList = document.getElementById('friend-list');
+const startDrawButton = document.getElementById('start-draw-button');
 const roulette = document.getElementById('roulette');
-const spinButton = document.getElementById('spin-button');
-const backgroundSound = document.getElementById('background-sound');
+const stopButton = document.getElementById('stop-button');
+const restartButton = document.getElementById('restart-button');
+const exitButton = document.getElementById('exit-button');
+const visitanteNameInput = document.getElementById('visitante-name-input');
 
-// Arreglo para almacenar los amigos y sus cartas
-let friends = [];
-let usedCards = new Set(); // Para almacenar las cartas ya utilizadas
-let currentCardImage = null; // Para almacenar la imagen de la carta seleccionada
-let currentCardNumber = null; // Para almacenar el número de la carta seleccionada
-
-// Función para iniciar el juego
-startGameButton.addEventListener('click', () => {
-    const visitorName = visitorNameInput.value.trim();
-    if (visitorName === '') {
-        alert('Por favor, ingresa tu nombre.');
-        return;
-    }
-    greeting.textContent = `${visitorName}, ¡Que comience el juego! Vamos a agregar amigos.`;
-    gameSection.style.display = 'block'; // Mostrar la sección del juego
-});
+const friends = [];
+const usedCards = new Set();
+let currentCardImage = null;
+let currentCardNumber = null;
+let visitanteName = '';
 
 // Función para agregar la carta
 addCardButton.addEventListener('click', () => {
@@ -63,9 +49,9 @@ addCardButton.addEventListener('click', () => {
 addFriendButton.addEventListener('click', () => {
     const friendName = friendNameInput.value.trim();
 
-    // Validar entrada
-    if (friendName === '') {
-        alert('Por favor, ingresa un nombre válido.');
+    // Validación del nombre del amigo
+    if (!/^[a-zA-Z]+$/.test(friendName)) {
+        alert('Datos Erroneos, ingresa el nombre de tu amigo, solo se aceptan letras');
         return;
     }
 
@@ -75,7 +61,7 @@ addFriendButton.addEventListener('click', () => {
     }
 
     // Agregar amigo y carta al arreglo
-    friends.push({ name: friendName, card: currentCardImage, cardNumber: currentCardNumber });
+    friends.push({ number: friends.length + 1, name: friendName, card: currentCardImage, cardNumber: currentCardNumber });
     usedCards.add(currentCardNumber); // Marcar la carta como utilizada
 
     // Limpiar campos de entrada
@@ -91,114 +77,61 @@ addFriendButton.addEventListener('click', () => {
 // Función para actualizar la lista de amigos en la interfaz
 function updateFriendList() {
     friendList.innerHTML = '';
-    friends.forEach(friend => {
+    friends.forEach((friend) => {
         const li = document.createElement('li');
-        li.innerHTML = `${friend.name} - <img src="${friend.card}" alt="Carta" class="thumbnail">`;
+        li.innerHTML = `${friend.number}. ${friend.name} - <img src="${friend.card}" alt="Carta" class="thumbnail">`;
         friendList.appendChild(li);
     });
 }
 
 // Función para iniciar el sorteo
 startDrawButton.addEventListener('click', () => {
-    if (friends.length === 0) {
-        alert('No hay amigos para sortear. Agrega amigos primero.');
-        return;
-    }
+    roulette.innerHTML = '';
+    friends.forEach((friend) => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <h2>${friend.number}. ${friend.name}</h2>
+            <img src="${friend.card}" alt="Carta" class="thumbnail">
+        `;
+        roulette.appendChild(div);
+    });
 
-    // Mostrar la ruleta
-    document.getElementById('roulette-container').style.display = 'block';
-    createRoulette(); // Crear la ruleta
+    // Mostrar el botón de parar
+    stopButton.style.display = 'block';
 });
 
-// Función para crear la ruleta
-function createRoulette() {
-    roulette.innerHTML = ''; // Limpiar contenido previo
-    const angle = 360 / friends.length;
-
-    friends.forEach((friend, index) => {
-        const img = document.createElement('img');
-        img.src = friend.card;
-        img.style.transform = `rotate(${angle * index}deg) translateY(-150px) rotate(-${angle * index}deg)`;
-        roulette.appendChild(img);
-    });
-}
-
-// Función para girar la ruleta
-spinButton.addEventListener('click', () => {
-    const sound = backgroundSound;
-    sound.play(); // Reproducir sonido de fondo
-//funcion para detener el sonido
-    setTimeout(() => {
-        sound.pause();
-    }, 5000);  
-
-    // Girar la ruleta
-    const randomIndex = Math.floor(Math.random() * friends.length);
-    const winner = friends[randomIndex];
-    document.getElementById('stop-button').addEventListener('click', function() {
-        // Detener la ruleta
-        // Puedes utilizar la función clearInterval para detener el intervalo de la ruleta
-        clearInterval(rouletteInterval);
-    });
-    // Arreglo para almacenar los amigos
-let amigos = [];
-
-// Función para agregar un amigo
-function addAmigo() {
-  const amigoName = document.getElementById('amigo-name').value;
-  const amigoImage = document.getElementById('amigo-image').files[0];
-  const amigo = {
-    nombre: amigoName,
-    imagen: URL.createObjectURL(amigoImage)
-  };
-  amigos.push(amigo);
-  document.getElementById('amigo-name').value = '';
-  document.getElementById('amigo-image').value = '';
-  generarRuleta();
-}
-
-// Función para generar la ruleta
-function generarRuleta() {
-  const rouletteContainer = document.getElementById('roulette-container');
-  const roulette = document.getElementById('roulette');
-
-  // Limpia el contenido de la ruleta
-  roulette.innerHTML = '';
-
-  // Genera los amigos dinámicamente
-  amigos.forEach((amigo, index) => {
-    const amigoHTML = `
-      <div class="amigo">
-        <span class="numero">${index + 1}</span>
-        <span class="nombre">${amigo.nombre}</span>
-        <img src="${amigo.imagen}" alt="${amigo.nombre}">
-      </div>
+// Función para parar el sorteo
+stopButton.addEventListener('click', () => {
+    const winnerIndex = Math.floor(Math.random() * friends.length);
+    const winner = friends[winnerIndex];
+    const winnerHTML = `
+        <h2>¡Felicitaciones!</h2>
+        <p>El ganador es: ${winner.number}. ${winner.name}</p>
+        <img src="${winner.card}" alt="Carta" class="thumbnail">
     `;
-    roulette.innerHTML += amigoHTML;
-  });
-}
+    roulette.innerHTML = winnerHTML;
+});
 
-// Función para girar la ruleta
-function spinRoulette() {
-  const result = document.getElementById('result');
-  const winnerIndex = Math.floor(Math.random() * amigos.length);
-  const winner = amigos[winnerIndex];
-  result.innerHTML = `
-    <h2>Tu eres mi amigo secreto!</h2>
-    <p>El ganador es: ${winner.nombre}</p>
-    <img src="${winner.imagen}" alt="${winner.nombre}">
-  `;
-}
-
-// Agrega eventos a los botones
-document.getElementById('add-amigo-button').addEventListener('click', addAmigo);
-document.getElementById('spin-button').addEventListener('click', spinRoulette);
-
-
-    // Mostrar el resultado
-    resultDisplay.innerHTML = `
-        <p>Muchas Gracias Por ser mi amigo(a), la ruleta arrojo como ganador(a) a mi amigo(a) <strong>${winner.name}</strong></p>
-        <img src="${winner.card}" alt="Carta ganadora" class="thumbnail">
-        <img src="img/trofeo.jpg" alt="Trofeo" class="thumbnail" style="max-width: 100px; max-height: 100px;">
+// Función para reiniciar el juego
+restartButton.addEventListener('click', () => {
+    friends.length = 0;});
+   // Función para salir del juego
+exitButton.addEventListener('click', () => {
+    visitanteName = visitanteNameInput.value.trim();
+    if (visitanteName === '') {
+        alert('Por favor, ingresa tu nombre para salir del juego.');
+        return;
+    }
+    const mensajeSalida = `
+        <h2>¡Hasta luego!</h2>
+        <p>Muchas gracias por participar del juego del amigo secreto, ${visitanteName}.</p>
     `;
+    roulette.innerHTML = mensajeSalida;
+    // Ocultar botones
+    addCardButton.style.display = 'none';
+    addFriendButton.style.display = 'none';
+    startDrawButton.style.display = 'none';
+    stopButton.style.display = 'none';
+    restartButton.style.display = 'none';
+    exitButton.style.display = 'none';
 });
