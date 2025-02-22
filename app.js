@@ -135,6 +135,65 @@ spinButton.addEventListener('click', () => {
     // Girar la ruleta
     const randomIndex = Math.floor(Math.random() * friends.length);
     const winner = friends[randomIndex];
+    document.getElementById('stop-button').addEventListener('click', function() {
+        // Detener la ruleta
+        // Puedes utilizar la función clearInterval para detener el intervalo de la ruleta
+        clearInterval(rouletteInterval);
+    });
+    // Arreglo para almacenar los amigos
+let amigos = [];
+
+// Función para agregar un amigo
+function addAmigo() {
+  const amigoName = document.getElementById('amigo-name').value;
+  const amigoImage = document.getElementById('amigo-image').files[0];
+  const amigo = {
+    nombre: amigoName,
+    imagen: URL.createObjectURL(amigoImage)
+  };
+  amigos.push(amigo);
+  document.getElementById('amigo-name').value = '';
+  document.getElementById('amigo-image').value = '';
+  generarRuleta();
+}
+
+// Función para generar la ruleta
+function generarRuleta() {
+  const rouletteContainer = document.getElementById('roulette-container');
+  const roulette = document.getElementById('roulette');
+
+  // Limpia el contenido de la ruleta
+  roulette.innerHTML = '';
+
+  // Genera los amigos dinámicamente
+  amigos.forEach((amigo, index) => {
+    const amigoHTML = `
+      <div class="amigo">
+        <span class="numero">${index + 1}</span>
+        <span class="nombre">${amigo.nombre}</span>
+        <img src="${amigo.imagen}" alt="${amigo.nombre}">
+      </div>
+    `;
+    roulette.innerHTML += amigoHTML;
+  });
+}
+
+// Función para girar la ruleta
+function spinRoulette() {
+  const result = document.getElementById('result');
+  const winnerIndex = Math.floor(Math.random() * amigos.length);
+  const winner = amigos[winnerIndex];
+  result.innerHTML = `
+    <h2>Tu eres mi amigo secreto!</h2>
+    <p>El ganador es: ${winner.nombre}</p>
+    <img src="${winner.imagen}" alt="${winner.nombre}">
+  `;
+}
+
+// Agrega eventos a los botones
+document.getElementById('add-amigo-button').addEventListener('click', addAmigo);
+document.getElementById('spin-button').addEventListener('click', spinRoulette);
+
 
     // Mostrar el resultado
     resultDisplay.innerHTML = `
